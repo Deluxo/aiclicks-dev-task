@@ -102,11 +102,9 @@ Build a single dashboard page with:
 ### Backend
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python seed_db.py        # Creates and seeds the SQLite database
-uvicorn main:app --reload
+uv sync                   # Installs dependencies into .venv
+uv run python seed_db.py  # Creates and seeds the SQLite database
+uv run uvicorn main:app --reload
 ```
 
 ### Frontend
