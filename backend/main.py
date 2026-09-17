@@ -1,19 +1,12 @@
-import os
 from contextlib import asynccontextmanager
-from datetime import timedelta
-
-import aiosqlite
+from db.repository.mentions import fetch_mentions_page
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from returns.maybe import Maybe
-
-from db.repository.mentions import fetch_mentions_page
 from models import MentionsRequest, MentionsResponse
+import aiosqlite
+import os
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "mentions.db")
-import logging
-logger = logging.getLogger(__name__)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,7 +15,6 @@ async def lifespan(app: FastAPI):
     app.state.db = db
     yield
     await db.close()
-
 
 app = FastAPI(title="Brand Mentions API", lifespan=lifespan)
 
@@ -33,6 +25,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/health")
 async def health():
