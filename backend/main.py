@@ -69,7 +69,11 @@ def merge_all(parts):
     return reduce(merge_parts, parts, ([], {}))
 
 
-def to_sql_where_parts(
+def to_where_str(conditions):
+    return f"WHERE {' AND '.join(conditions)}" if conditions else ""
+
+
+def to_sql_where_conditions_and_params(
     filters: Mapping[str, Any] = {},
     op_map: Mapping[str, Any] = {},
 ) -> tuple[list[str], dict]:
@@ -100,8 +104,7 @@ async def health():
 @app.post("/mentions", response_model=MentionsResponse)
 async def list_mentions(request: MentionsRequest = MentionsRequest()):
     request = MentionsRequest(**request.model_dump())
-    db = app.state.db
-    where_conditions, params = to_sql_where_parts(
+    where_conditions, params = to_sql_where_conditions_and_params(
         request.filters.model_dump(mode="json"),
         {
             "model": where_in,
@@ -110,10 +113,10 @@ async def list_mentions(request: MentionsRequest = MentionsRequest()):
         },
     )
 
-    where = "WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+    where = to_where_str(where_conditions)
 
     return MentionsResponse(
-        total=(await (await db.execute(f"SELECT COUNT(*) FROM mentions {where}", params)).fetchone())[0],
+        total=(await (await app.state.db.execute(f"SELECT COUNT(*) FROM mentions {where}", params)).fetchone())[0],
         page=request.page,
         per_page=request.per_page,
         data=list(map(
@@ -128,7 +131,7 @@ async def list_mentions(request: MentionsRequest = MentionsRequest()):
                 created_at=row[7]
             ),
 
-            (await (await db.execute(
+            (await (await app.state.db.execute(
                 f"SELECT id, query_text, model, mentioned, position, sentiment, citation_url, created_at FROM mentions {where} ORDER BY created_at DESC LIMIT :_limit_ OFFSET :_offset_",
                 {
                     **params,
