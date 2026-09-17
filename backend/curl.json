@@ -4,6 +4,7 @@
   "filters": {
     "model": "claude",
     "sentiment": "positive",
-    "date_from": "2025-03-30"
+    "date_from": "2025-03-30",
+    "date_to": "2025-12-31"
   }
 }

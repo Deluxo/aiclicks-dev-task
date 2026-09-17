@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Literal, Optional
 from datetime import date, datetime
 
@@ -6,10 +6,15 @@ from datetime import date, datetime
 # Request models
 
 class MentionFilters(BaseModel):
-    model: Optional[Literal["chatgpt", "claude", "gemini", "perplexity"]] = None
+    model: Optional[list[Literal["chatgpt", "claude", "gemini", "perplexity"]]] = None
     sentiment: Optional[Literal["positive", "neutral", "negative"]] = None
     date_from: Optional[date] = None
     date_to: Optional[date] = None
+
+    @field_validator("model", mode="before")
+    @classmethod
+    def coerce_model(cls, v):
+        return [v] if isinstance(v, str) else v
 
 
 class MentionsRequest(BaseModel):
