@@ -1,21 +1,21 @@
-from pydantic import BaseModel
-from typing import Optional
-from datetime import datetime
+from pydantic import BaseModel, Field
+from typing import Literal, Optional
+from datetime import date, datetime
 
 
 # Request models
 
 class MentionFilters(BaseModel):
-    model: Optional[str] = None  # chatgpt, claude, gemini, perplexity
-    sentiment: Optional[str] = None  # positive, neutral, negative
-    date_from: Optional[str] = None  # YYYY-MM-DD
-    date_to: Optional[str] = None  # YYYY-MM-DD
+    model: Optional[Literal["chatgpt", "claude", "gemini", "perplexity"]] = None
+    sentiment: Optional[Literal["positive", "neutral", "negative"]] = None
+    date_from: Optional[date] = None
+    date_to: Optional[date] = None
 
 
 class MentionsRequest(BaseModel):
-    page: int = 1
-    per_page: int = 25
-    filters: Optional[MentionFilters] = None
+    page: int = Field(default=1, ge=1)
+    per_page: int = Field(default=25, ge=1)
+    filters: MentionFilters = MentionFilters()
 
 
 class TrendsRequest(BaseModel):

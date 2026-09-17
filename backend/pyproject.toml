@@ -8,4 +8,14 @@ dependencies = [
     "uvicorn[standard]==0.30.0",
     "aiosqlite==0.20.0",
     "pydantic>=2.11",
+    "returns>=0.29.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.414",
+    "returns[compatible-mypy]>=0.29.0",
+]
+
+[tool.mypy]
+plugins = ["returns.contrib.mypy.returns_plugin"]

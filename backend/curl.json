@@ -1,0 +1,9 @@
+{
+  "page": 1,
+  "per_page": 3,
+  "filters": {
+    "model": "claude",
+    "sentiment": "positive",
+    "date_from": "2025-03-30"
+  }
+}
