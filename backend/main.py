@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
-from db.repository.mentions import fetch_mentions_page, fetch_mentions_trends_page
+from db.repository.mentions import fetch_mentions_page
+from db.repository.trends import fetch_mentions_trends_page
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from models import MentionsRequest, MentionsResponse, TrendsRequest, TrendsResponse
