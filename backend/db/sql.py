@@ -3,9 +3,18 @@ from functools import reduce
 from itertools import starmap
 from operator import itemgetter
 from typing import Any
-
 from returns.curry import curry, partial
 from returns.pipeline import flow
+
+
+def _merge_parts(acc, part):
+    frags, params = acc
+    frag, extra = part
+    return ([*frags, frag], {**params, **extra})
+
+
+def _merge_all(parts):
+    return reduce(_merge_parts, parts, ([], {}))
 
 
 def where_op(operator, column, key, value):
@@ -25,16 +34,6 @@ op_gt  = curry(partial(where_op, ">"))
 op_gte = curry(partial(where_op, ">="))
 op_lt  = curry(partial(where_op, "<"))
 op_lte = curry(partial(where_op, "<="))
-
-
-def merge_parts(acc, part):
-    frags, params = acc
-    frag, extra = part
-    return ([*frags, frag], {**params, **extra})
-
-
-def merge_all(parts):
-    return reduce(merge_parts, parts, ([], {}))
 
 
 def to_where_str(conditions):
@@ -60,5 +59,5 @@ def to_sql_where_conditions_and_params(
         dict.items,
         partial(filter, itemgetter(1)),
         partial(starmap, apply_spec),
-        merge_all,
+        _merge_all,
     )
