@@ -28,25 +28,7 @@ export const Button = atom(
 );
 export const ActionButton = atom(<button className="font-medium hover:underline">label</button>);
 export const Skeleton = atom(<div className="animate-pulse rounded bg-gray-100" />);
-export const Table = atom(<table className="w-full text-left text-sm" />);
-export const TableHeadRow = atom(
-  <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
-    <th>header</th>
-  </tr>,
-);
-export const TableHeadCell = atom(<th className="px-4 py-3 font-medium">header</th>);
-export const TableRow = atom(
-  <tr className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
-    <td>cell</td>
-  </tr>,
-);
-export const TableCell = atom(<td className="px-4 py-3">cell</td>);
-export const TableFooter = atom(
-  <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3">
-    <span>footer</span>
-  </div>,
-);
-export const Badge = atom(<span className="rounded-full px-2.5 py-1 text-xs font-medium">badge</span>);
+export const Pill = atom(<span className="rounded-full px-2.5 py-1 text-xs font-medium">badge</span>);
 export const Dash = atom(<span className="text-gray-400">—</span>);
 export const CheckMark = atom(<span className="font-medium text-emerald-600">✓</span>);
 export const Link = atom(<a className="text-indigo-600 hover:underline" />);
