@@ -20,48 +20,48 @@ filter bar → mentions table with pagination → loading + empty states.
 ## Checklist
 
 ### A. Data layer (mock behind real signatures)
-- [ ] `lib/mock.ts` — deterministic generator: ~500 records, Jan–Mar 2025, random
+- [x] `lib/mock.ts` — deterministic generator: ~500 records, Jan–Mar 2025, random
       model/sentiment/position/mentioned/date/citation. Fixed seed so it's stable across reloads.
-- [ ] `lib/api.ts` — `fetchMentions(req: MentionsRequest): Promise<MentionsResponse>` and
+- [x] `lib/api.ts` — `fetchMentions(req: MentionsRequest): Promise<MentionsResponse>` and
       `fetchTrends(req: TrendsRequest): Promise<TrendsResponse>`.
       Mock impl: apply filters (model, sentiment, date_from/date_to via date part), sort
       `created_at` desc, paginate; trends aggregates by day or Monday-of-week; `total` = count,
       `mentioned` = count where mentioned.
-- [ ] A single `USE_MOCK` flag (e.g. `const USE_MOCK = !process.env.NEXT_PUBLIC_API_URL`)
+- [x] A single `USE_MOCK` flag (e.g. `const USE_MOCK = !process.env.NEXT_PUBLIC_API_URL`)
       so Phase 3 is a one-line swap. Real impl `fetch`es `${API_BASE}/mentions` / `/mentions/trends`.
-- [ ] `API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"`.
+- [x] `API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"`.
 
 ### B. Components (`app/components/`)
-- [ ] `Header.tsx` — app name ("Brand Mentions") + one-line subtitle.
-- [ ] `KpiCards.tsx` — 3 cards, responsive grid (1 → 2 → 3): **Total Mentions**,
+- [x] `Header.tsx` — app name ("Brand Mentions") + one-line subtitle.
+- [x] `KpiCards.tsx` — 3 cards, responsive grid (1 → 2 → 3): **Total Mentions**,
       **Brand Mentioned**, **Mention Rate %** (mentioned/total). Respect all filters.
-- [ ] `TrendChart.tsx` — recharts: gray area = total, indigo line = mentioned; legend, tooltip,
+- [x] `TrendChart.tsx` — recharts: gray area = total, indigo line = mentioned; legend, tooltip,
       `ResponsiveContainer`. Day/Week toggle buttons. Empty → friendly message.
-- [ ] `Filters.tsx` — Model select, Sentiment select, Date from/to inputs, Reset button.
+- [x] `Filters.tsx` — Model select, Sentiment select, Date from/to inputs, Reset button.
       Controlled by parent; onChange lifts state up (auto-apply).
-- [ ] `MentionsTable.tsx` — columns: Query, Model (color badge), Mentioned (✓/—), Position (#n),
+- [x] `MentionsTable.tsx` — columns: Query, Model (color badge), Mentioned (✓/—), Position (#n),
       Sentiment (pill), Citation (link, "—" if null), Date. Skeleton rows while loading.
       Empty state row with a Reset-filters action. Pagination footer (Prev/Next + "Showing X–Y of Z").
 
 ### C. Page (`app/page.tsx`, "use client")
-- [ ] State: `filters`, `page`, `mentions`, `trends`, `loading`, `error`.
-- [ ] `useEffect` fetches mentions (page+filters) and trends (filters) on change;
+- [x] State: `filters`, `page`, `mentions`, `trends`, `loading`, `error`.
+- [x] `useEffect` fetches mentions (page+filters) and trends (filters) on change;
       reset `page` to 1 when filters change.
-- [ ] Derived `totalPages = ceil(total / per_page)`.
-- [ ] Layout: container → Header → KpiCards → TrendChart → Filters → MentionsTable.
-- [ ] Loading: skeleton for KPIs/chart/table. Error: simple banner (mock won't error, but handle it).
+- [x] Derived `totalPages = ceil(total / per_page)`.
+- [x] Layout: container → Header → KpiCards → TrendChart → Filters → MentionsTable.
+- [x] Loading: skeleton for KPIs/chart/table. Error: simple banner (mock won't error, but handle it).
 
 ### D. Polish
-- [ ] Apply design tokens from `PLAN/README.md` (colors, cards, badges, pills).
-- [ ] Responsive pass: wrapping filters, `overflow-x-auto` table, `ResponsiveContainer` chart,
+- [x] Apply design tokens from `PLAN/README.md` (colors, cards, badges, pills).
+- [x] Responsive pass: wrapping filters, `overflow-x-auto` table, `ResponsiveContainer` chart,
       KPI grid breakpoints.
-- [ ] Consistent spacing/sizing; no stray default styles.
+- [x] Consistent spacing/sizing; no stray default styles.
 
 ### E. Verify
-- [ ] `npm run dev` → open in browser, exercise: change each filter, page through, toggle Day/Week,
+- [x] `npm run dev` → open in browser, exercise: change each filter, page through, toggle Day/Week,
       clear all → empty/loaded states.
-- [ ] `npm run build` → clean.
-- [ ] Screenshot/mental check: does it look like a real product in the first 30 seconds?
+- [x] `npm run build` → clean.
+- [x] Screenshot/mental check: does it look like a real product in the first 30 seconds?
 
 ---
 

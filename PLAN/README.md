@@ -2,9 +2,9 @@
 
 > **This file is the resume point.** Read it top-to-bottom at the start of every session.
 
-- **Status:** BUILDING — Phase 1 (UI prototype)
-- **Angle:** UI-first (top-down). Reviewer's first impression is UX, so we prototype the
-  full dashboard on mock data before touching the (trivial) backend.
+- **Status:** BUILDING — Phase 4 (NOTES.md + final polish)
+- **Angle:** UI-first (top-down). Mock phase skipped: backend was already built, so the
+  frontend went straight to the real API (`NEXT_PUBLIC_API_URL` → `http://localhost:8001`).
 
 ---
 
@@ -25,10 +25,14 @@
 
 | # | Phase | File | Status |
 |---|-------|------|--------|
-| 1 | UI prototype (mock data) | `todo/1-ui-prototype.md` | IN PROGRESS |
-| 2 | Backend (FastAPI + SQLite) | `todo/2-backend.md` | TODO |
-| 3 | Wire-up (mock → real API) | `todo/3-wireup.md` | TODO |
+| 1 | UI prototype (mock data) | `done/1-ui-prototype.md` | DONE¹ |
+| 2 | Backend (FastAPI + SQLite) | `todo/2-backend.md` | DONE² |
+| 3 | Wire-up (mock → real API) | `todo/3-wireup.md` | SKIPPED³ |
 | 4 | NOTES.md + final polish | `todo/4-notes-polish.md` | TODO |
+
+¹ Mock phase skipped — UI built directly against the real API.
+² Completed in a prior session (endpoints verified via curl); file not moved to `done/`.
+³ Folded into Phase 1: no mock layer exists, so there was nothing to swap.
 
 ---
 
@@ -58,9 +62,8 @@ Clean modern neutral palette. No brand assets — we pick the look.
   request only has dates, but a chart ignoring model/sentiment is a UX bug. → We add
   optional `model`/`sentiment` to the trends endpoint (small change, note in NOTES.md).
 - **Omit raw `id`** from the mentions table (not user-meaningful). Show all other fields.
-- **Mock-first:** UI is fully reviewable before the backend exists. `lib/api.ts` exposes
-  `fetchMentions`/`fetchTrends`; a mock implementation behind the same signatures lets the
-  UI code be identical for mock vs. real.
+- **Mock-first:** *(superseded — backend already existed, so the frontend went straight to
+  the real API; no mock layer was built.)* `lib/api.ts` exposes `fetchMentions`/`fetchTrends`.
 - **Deployment + public GitHub repo: DEFERRED** (user decision). Keep it deploy-ready:
   env-configured `NEXT_PUBLIC_API_URL` + CORS origin. Backend seeds `mentions.db` on startup
   if missing (works on ephemeral filesystems).
@@ -122,11 +125,10 @@ Cap `per_page` at 100. Empty result → 200 with `data: []`.
 - `mentions.db` — generated artifact (gitignored).
 
 ### Frontend (`frontend/`)
-- `lib/api.ts` — **new.** `fetchMentions`/`fetchTrends` + mock impl.
-- `lib/mock.ts` — **new.** deterministic mock dataset generator.
-- `lib/types.ts` — already matches API.
-- `app/page.tsx` — dashboard (client component).
-- `app/components/` — **new.** `Header`, `KpiCards`, `TrendChart`, `Filters`, `MentionsTable`.
+- `lib/api.ts` — `fetchMentions`/`fetchTrends`; POSTs to `${API_BASE}` (env-configured). No mock layer.
+- `lib/types.ts` — matches API.
+- `app/page.tsx` — dashboard (client component): filters/page/groupBy state, AbortController per fetch.
+- `app/components/` — `Header`, `KpiCards`, `TrendChart`, `Filters`, `MentionsTable`.
 
 ---
 
@@ -139,6 +141,10 @@ Cap `per_page` at 100. Empty result → 200 with `data: []`.
 
 ## Current state
 
-- **Phase 1 (UI prototype) in progress.** Nothing built yet in code — plan is written.
-- Next concrete action: build `lib/mock.ts` + `lib/api.ts`, then the components, then `page.tsx`,
-  then verify in browser.
+- **Phases 1–3 done.** Frontend is built and talking to the live backend on
+  `http://localhost:8001` (via `frontend/.env.local`; gitignored).
+  - `npm run build` clean; dev server verified (page 200, no compile errors); API contract
+    curl-verified (filters, pagination, week buckets, empty range → `[]`).
+  - KPI cards: Total Mentions from `/mentions.total` (all filters); Brand Mentioned / Rate
+    from trend sums (date range only — backend trends endpoint takes dates only).
+- **Phase 4 next:** write `NOTES.md`, final polish pass.

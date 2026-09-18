@@ -24,9 +24,9 @@ class MentionsRequest(BaseModel):
 
 
 class TrendsRequest(BaseModel):
-    date_from: Optional[str] = None
-    date_to: Optional[str] = None
-    group_by: str = "day"  # "day" or "week"
+    date_from: Optional[date] = None
+    date_to: Optional[date] = None
+    group_by: Literal["day", "week"] = "day"
 
 
 # Response models
