@@ -1,8 +1,8 @@
 from contextlib import asynccontextmanager
-from db.repository.mentions import fetch_mentions_page
+from db.repository.mentions import fetch_mentions_page, fetch_mentions_trends_page
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from models import MentionsRequest, MentionsResponse
+from models import MentionsRequest, MentionsResponse, TrendsRequest, TrendsResponse
 import aiosqlite
 import os
 
@@ -41,3 +41,11 @@ async def list_mentions(request: MentionsRequest = MentionsRequest()):
         request.per_page
     )
     return MentionsResponse(total=total, page=request.page, per_page=request.per_page, data=rows)
+
+@app.post("/mentions/trends", response_model=TrendsResponse)
+async def list_mentions_trends(request: TrendsRequest = TrendsRequest()):
+    rows = await fetch_mentions_trends_page(
+        app.state.db,
+        request.model_dump(mode="json"),
+    )
+    return TrendsResponse(data=rows)
