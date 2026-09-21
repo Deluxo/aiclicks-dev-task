@@ -1,5 +1,7 @@
 # Brand Mentions Dashboard
 
+Live: https://modest-determination-production.up.railway.app/
+
 ## What it is and what it's for
 
 Analytics dashboard for tracking how often a brand is mentioned in AI model responses (ChatGPT, Claude, Gemini, Perplexity).
