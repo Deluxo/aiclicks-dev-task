@@ -1,3 +1,5 @@
+from logging import Logger
+
 import aiosqlite
 from collections.abc import Mapping, Sequence
 from typing import Any
@@ -33,9 +35,10 @@ def build_mentions_query(
         {
             "model": where_in,
             "date_from": op_gte("created_at"),
-            "date_to": op_lte("created_at"),
+            "date_to": op_lte("date(created_at)"),
         },
     )
+
     return (
         to_where_str(where_conditions),
         params,
